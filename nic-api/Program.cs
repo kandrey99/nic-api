@@ -5,8 +5,10 @@ using nic_api.DataAccess;
 using nic_api.Domain;
 using nic_api.Extensions;
 using nic_api.Models;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console());
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddValidatorsFromAssemblyContaining<CreateDoctorValidator>(ServiceLifetime.Transient); ;
@@ -66,9 +68,9 @@ app.MapGet("/api/doctors", async (int page, int pageSize, string sortField, stri
     .Include(d => d.Area)
     .Include(d => d.Office)
     .Include(d => d.Specialization)
-    .Skip((page - 1) * pageSize)
-    .Take(pageSize)
     .OrderByDynamic(sortField, sortOrder)
+    .Skip((page - 1) * pageSize)
+    .Take(pageSize)    
     .Select(d => mapper.Map<IndexDoctor>(d))
     .AsNoTracking()
     .ToListAsync())
@@ -126,9 +128,9 @@ app.MapDelete("/api/doctors/{id:int}", async (int id, AppDb db) =>
 # region Patients api
 app.MapGet("/api/patients", async (int page, int pageSize, string sortField, string sortOrder, IMapper mapper, AppDb db) => await db.Patients    
     .Include(d => d.Area)
-    .Skip((page - 1) * pageSize)
-    .Take(pageSize)
     .OrderByDynamic(sortField, sortOrder)
+    .Skip((page - 1) * pageSize)
+    .Take(pageSize)    
     .Select(p => mapper.Map<IndexPatient>(p))
     .AsNoTracking()
     .ToListAsync())
