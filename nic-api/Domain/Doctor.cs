@@ -2,12 +2,12 @@
 
 namespace nic_api.Domain;
 
-public class Doctor
+public class Doctor : Auditable
 {
     public int Id { get; set; }
 
     [MaxLength(255)]
-    public string Fio { get; set; } = string.Empty;
+    public string Fio { get; set; } = null!;
 
     public int OfficeId { get; set; }
     public Office? Office { get; set; }

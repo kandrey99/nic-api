@@ -7,5 +7,5 @@ public class Area
     public int Id { get; set; }
 
     [MaxLength(255)]
-    public string Number { get; set; } = string.Empty;
+    public string Number { get; set; } = null!;
 }
